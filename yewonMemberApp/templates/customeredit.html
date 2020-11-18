@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Edit</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            {% if customer.name != "" %}
+            <a class="navbar-brand" href="#">Hello {{customer.name}}, please update your info :)</a>
+            {% else %}
+            <a class="navbar-brand" href="#">Hello {{customer.phone}}, please update your info :)</a>
+            {% endif %}
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto"></ul>
+                <span class="navbar-text">
+                    </a> <a href="/customer/logout" role="button" class="btn btn-sm btn-info ml-2 text-white">Logout</a>
+                </span>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        {% if messages %}
+        <ul class="messages">
+                {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                {% endfor %}
+        </ul>
+        {% endif %}
+        <p></p>
+        {% if customer.name != "" %}
+        <h1>Edit info for: {{customer.name}}</h1>
+        {% else %}
+        <h1>Edit info for: {{customer.phone}}</h1>
+        {% endif %}
+        <p></p>
+        <form action="/customer/update/{{customer.id}}" method="POST">
+            {% csrf_token %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="text-danger small" id="errors">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+            <div class="form-group row">
+                <label for="phonenumberinput" class="col-sm-5 col-form-label col-form-label-sm">Phone Number:</label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control form-control-sm" name="phone_num" value="{{customer.phone}}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="nameinput" class="col-sm-5 col-form-label col-form-label-sm">Name:</label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control form-control-sm" name="name" value="{{customer.name}}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="emailinput" class="col-sm-5 col-form-label col-form-label-sm">Email:</label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control form-control-sm" name="email" value="{{customer.email}}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="password" class="col-sm-5 col-form-label col-form-label-sm">Password:</label>
+                <div class="col-sm-7">
+                    <input type="password" class="form-control form-control-sm" name="password">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="password_confinput" class="col-sm-5 col-form-label col-form-label-sm">Confirm PW:</label>
+                <div class="col-sm-7">
+                    <input type="password" class="form-control form-control-sm" name="password_conf">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="custom-control custom-checkbox">
+                    {% if customer.newsletter_email %}
+                    <input type="checkbox" class="custom-control-input" id="email" name="email_sub" checked="checked">
+                    {% else %}
+                    <input type="checkbox" class="custom-control-input" id="email" name="email_sub">
+                    {% endif %}
+                    <label class="custom-control-label" for="email">Receive Newsletter via email?</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    {% if customer.newsletter_text %}
+                    <input type="checkbox" class="custom-control-input" id="text_sub" name="text_sub" checked="checked">
+                    {% else %}
+                    <input type="checkbox" class="custom-control-input" id="text_sub" name="text_sub">
+                    {% endif %}
+                    <label class="custom-control-label" for="text_sub">Receive Newsletter via text message?</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-8"></div>
+                <div class="col-sm-4"><button type="submit" class="btn btn-primary">Update</button></div>
+
+            </div>
+        </form>
+        <div class="form-group row">
+
+            <div class="col-sm-6">
+                <a href="/customer/logindash" class="btn btn-secondary btn-sm active" role="button"
+                    aria-pressed="true">Go
+                    Back</a>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
